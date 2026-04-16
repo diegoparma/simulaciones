@@ -1,0 +1,33 @@
+# Simulacion minima local para validar LAMMPS en modo serial
+units           lj
+atom_style      atomic
+boundary        p p p
+
+# Caja y atomos
+lattice         fcc 0.8442
+region          box block 0 8 0 8 0 8
+create_box      1 box
+create_atoms    1 box
+mass            1 1.0
+
+# Interaccion Lennard-Jones
+pair_style      lj/cut 2.5
+pair_coeff      1 1 1.0 1.0 2.5
+
+# Vecinos
+neighbor        0.3 bin
+neigh_modify    delay 0 every 1 check yes
+
+# Condiciones iniciales
+velocity        all create 1.2 12345 loop geom
+
+# Integracion
+fix             int all nve
+timestep        0.005
+
+# Salida
+thermo          50
+thermo_style    custom step temp pe ke etotal press
+
+# Correr una prueba corta
+run             500

@@ -1,0 +1,69 @@
+# Skyrmion simulation with SOT (Spin-Orbit Torque)
+# Configure a magnetic skyrmion on a square lattice and drive it with current
+
+units metal
+dimension 2
+boundary p p p
+atom_style spin
+
+atom_modify map array
+
+# Create a 2D square lattice with periodic BC in x,y and fixed in z
+lattice sq 2.6
+region box block 0 20 0 20 -0.5 0.5
+create_box 1 box
+create_atoms 1 box
+
+mass 1 55.845
+
+# Magnetic interactions: exchange + DMI (Dzyaloshinskii-Moriya) 
+pair_style hybrid/overlay spin/exchange 3.5 spin/dmi 3.5
+pair_coeff * * spin/exchange exchange 3.5 0.01593 0.06626915552 1.211
+pair_coeff * * spin/dmi dmi 3.5 0.12e-03 0.0 0.0 1.0
+
+min_style spin
+min_modify alpha_damp 1.0 discrete_factor 10.0
+
+neighbor 0.1 bin
+neigh_modify every 10 check yes delay 20
+
+# Initialize all spins pointing up (z-direction), magnitude 2.2 Bohr magnetons
+set group all spin/random 42 2.2
+
+# Allow spins to relax a bit to form skyrmion-like defect with DMI
+# Minimize briefly to create a skyrmion
+minimize 1.0e-8 1.0e-8 100 100
+
+# Magnetic field and anisotropy for skyrmion stabilization
+fix 1 all precession/spin zeeman 0.0 0.0 0.0 1.0 anisotropy 5e-05 0.0 0.0 1.0
+
+# Langevin thermostat for spin bath (zero temperature for pure SOT dynamics)
+fix 2 all langevin/spin 0.0 0.0 21
+
+# Spin integrator
+fix 3 all nve/spin lattice frozen
+
+# NEW: Add spin-orbit torque (damping-like term)
+# Current applied in +x direction with polarization in z
+# This will drive the skyrmion in y-direction
+fix 1 all precession/spin zeeman 0.0 0.0 0.0 1.0 anisotropy 5e-05 0.0 0.0 1.0 sot/dl 0.025 1.0 0.0 0.0
+
+timestep 0.0001
+
+# Compute magnetic quantities
+compute out_mag all spin
+variable magx equal c_out_mag[1]
+variable magy equal c_out_mag[2]
+variable magz equal c_out_mag[3]
+variable emag equal c_out_mag[5]
+
+# Thermo output
+thermo_style custom step time v_magx v_magy v_magz v_emag
+thermo 50
+
+# Dump spin configuration for tracking skyrmion position
+compute outsp all property/atom spx spy spz sp fmx fmy fmz
+dump 1 all custom 10 dump.skyrmion.lammpstrj type x y z c_outsp[1] c_outsp[2] c_outsp[3] c_outsp[4]
+
+# Run dynamics: skyrmion should move due to SOT
+run 2000

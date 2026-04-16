@@ -1,0 +1,116 @@
+LAMMPS (30 Mar 2026)
+Lattice spacing in x,y,z = 2.8665 2.8665 2.8665
+Created orthogonal box = (0 0 0) to (22.932 22.932 5.733)
+  1 by 1 by 1 MPI processor grid
+Created 256 atoms
+  using lattice units in orthogonal box = (0 0 0) to (22.932 22.932 5.733)
+  create_atoms CPU = 0.000 seconds
+WARNING: Set attribute spin/random is deprecated -- use spin/atom/random instead (src/set.cpp:2447)
+Setting atom values ...
+  256 settings made for spin/random
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+- fix nve/spin command: https://doi.org/10.1016/j.jcp.2018.06.042
+The log file lists these citations in BibTeX format.
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Generated 0 of 0 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 10 steps, delay = 20 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 3.6
+  ghost atom cutoff = 3.6
+  binsize = 1.8, bins = 13 13 4
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair spin/exchange, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+WARNING: Dump 1 includes no atom IDs and is not sorted by ID. This may complicate post-processing tasks or visualization (src/dump.cpp:210)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.0001
+Per MPI rank memory allocation (min/avg/max) = 4.768 | 4.768 | 4.768 Mbytes
+   Step          Time          v_magx         v_magy         v_magz         v_emag    
+         0   0             -0.017091845    0.024304584   -0.093499774    0.0015148976 
+       100   0.01          -0.017313097    0.024996213   -0.096178808   -0.016078267  
+       200   0.02          -0.017772508    0.02594582    -0.098725684   -0.034836046  
+Loop time of 0.0538715 on 1 procs for 200 steps with 256 atoms
+
+Performance: 32.076 ns/day, 0.748 hours/ns, 3712.541 timesteps/s, 950.411 katom-step/s
+99.2% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.010943   | 0.010943   | 0.010943   |   0.0 | 20.31
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0024953  | 0.0024953  | 0.0024953  |   0.0 |  4.63
+Output  | 0.0024904  | 0.0024904  | 0.0024904  |   0.0 |  4.62
+Modify  | 0.037674   | 0.037674   | 0.037674   |   0.0 | 69.93
+Other   |            | 0.0002687  |            |       |  0.50
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:            749 ave         749 max         749 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         3584 ave        3584 max        3584 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 3584
+Ave neighs/atom = 14
+Neighbor list builds = 0
+Dangerous builds = 0
+Generated 0 of 0 mixed pair_coeff terms from geometric mixing rule
+WARNING: Dump 1 includes no atom IDs and is not sorted by ID. This may complicate post-processing tasks or visualization (src/dump.cpp:210)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 200
+  Time step     : 0.0001
+Per MPI rank memory allocation (min/avg/max) = 6.907 | 6.907 | 6.907 Mbytes
+   Step          Time          v_magx         v_magy         v_magz         v_emag    
+       200   0.02          -0.017772508    0.02594582    -0.098725684   -0.034836046  
+       300   0.03          -0.018260405    0.026886182   -0.10105035    -0.054667918  
+       400   0.04          -0.018507534    0.02762177    -0.10359914    -0.076183278  
+       500   0.05          -0.018462965    0.028645255   -0.10598701    -0.098024548  
+       600   0.06          -0.0186387      0.030223777   -0.10854819    -0.12201926   
+       700   0.07          -0.018168832    0.031401498   -0.11109375    -0.14767824   
+       800   0.08          -0.018113467    0.032288076   -0.11376175    -0.17343537   
+       900   0.09          -0.018055974    0.033631329   -0.11626456    -0.19976599   
+      1000   0.1           -0.017594505    0.034400547   -0.11922216    -0.22789393   
+Loop time of 0.238506 on 1 procs for 800 steps with 256 atoms
+
+Performance: 28.980 ns/day, 0.828 hours/ns, 3354.207 timesteps/s, 858.677 katom-step/s
+97.9% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.049578   | 0.049578   | 0.049578   |   0.0 | 20.79
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.010583   | 0.010583   | 0.010583   |   0.0 |  4.44
+Output  | 0.010465   | 0.010465   | 0.010465   |   0.0 |  4.39
+Modify  | 0.16674    | 0.16674    | 0.16674    |   0.0 | 69.91
+Other   |            | 0.00114    |            |       |  0.48
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:            749 ave         749 max         749 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         3584 ave        3584 max        3584 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 3584
+Ave neighs/atom = 14
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:00

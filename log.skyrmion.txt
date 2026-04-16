@@ -1,0 +1,8 @@
+LAMMPS (30 Mar 2026)
+Reading data file ...
+  orthogonal box = (0.74 0.74 -5) to (98.275 98.275 9.305)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+ERROR: Incorrect format in Atoms section of data file: 1 1 7.175000 38.745000 1.435000 -0.293752 -0.090333 0.951604
+For more information see https://docs.lammps.org/err0002 (src/atom.cpp:1106)
+Last input line: read_data skyrmion_atoms.dat

@@ -1,0 +1,20 @@
+# Python environments
+.venv/
+venv/
+venv_viz/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Editor/OS noise
+.DS_Store
+.vscode/
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+
+# LAMMPS local build outputs
+lammps/build-local-sot/

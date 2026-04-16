@@ -1,0 +1,70 @@
+# Skyrmion configuration with SOT dynamics
+# 2D circular skyrmion (Néel-type) in thin magnetic film
+# Spin-Orbit Torque applied to drive skyrmion motion
+
+units            metal
+atom_style       spin
+dimension        3
+boundary         p p p
+
+# Atom mapping required by nve/spin (must be BEFORE create_box)
+atom_modify      map array
+
+# Create simulation box
+region           box block 20 80 20 80 0 10
+create_box       1 box
+
+# Create lattice atoms in circular region (skyrmion-like pattern)
+lattice          bcc 2.87
+region           sky_region sphere 50 50 5 35 units box
+create_atoms     1 region sky_region
+
+# Number of atoms created
+variable         natoms equal count(all)
+print            "Created ${natoms} atoms in circular region"
+
+# Magnetic interactions (exchange coupling)
+pair_style       spin/exchange 3.5
+pair_coeff       * * exchange 3.5 0.01593 0.06626915552 1.211
+
+mass             1 55.845
+
+# Initialize random spins (will appear as circular cloud)
+set              group all spin 2.2 0.0 0.0 1.0
+set              group all spin/random 42 2.2
+
+# Relaxation parameters
+velocity         all create 100 42
+timestep         0.0001
+
+# Compute spin properties for output
+compute          outsp all property/atom spx spy spz sp fmx fmy fmz
+
+# Fixes for spin dynamics
+fix              1 all precession/spin zeeman 0.0 0.0 0.0 1.0 anisotropy 5e-05 0.0 0.0 1.0
+fix              2 all langevin/spin 0.05 0.1 21
+
+# Phase 1: Equilibration (1000 steps = 0.1 ps)
+print            "Phase 1: Equilibration without SOT (1000 steps)"
+fix              3 all nve/spin lattice moving
+dump             1 all custom 100 dump_eq.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]
+run              1000
+undump           1
+
+# Phase 2: Apply SOT (damping-like torque in +y direction)
+print            "Phase 2: SOT dynamics (2000 steps with damping-like current)"
+unfix            1
+unfix            2
+unfix            3
+fix              1 all precession/spin zeeman 0.0 0.0 0.0 1.0 anisotropy 5e-05 0.0 0.0 1.0 sot/dl 0.050 0.0 1.0 0.0
+fix              2 all langevin/spin 0.05 0.1 21
+fix              3 all nve/spin lattice moving
+
+dump             2 all custom 50 dump.skyrmion.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]
+run              2000
+
+print            "=========================================="
+print            "Simulation complete"
+print            "=========================================="
+
+write_dump       all custom dump_final.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]

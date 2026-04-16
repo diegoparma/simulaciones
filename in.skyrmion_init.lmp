@@ -1,0 +1,47 @@
+# Skyrmion visualization and SOT dynamics
+# 2D circular skyrmion in magnetic film
+
+units            metal
+atom_style       spin
+dimension        3
+boundary         p p p
+
+# Create initial skyrmion atoms
+read_data        skyrmion_atoms.dat
+
+# Magnetic interactions
+pair_style       spin/exchange 5.0
+pair_coeff       * * exchange 1.0 0.0 1.0
+
+# Set spin magnitudes and masses
+set              group all spin 2.2 0.0 0.0 1.0
+
+# Initialize velocities
+velocity         all create 100 42
+
+# Define groups
+group            skyrmion_center region sphere 50 50 1 15
+
+# Fix for spin dynamics
+fix              1 all precession/spin zeeman 0.0 0.0 0.0 1.0 \
+                 anisotropy 5e-05 0.0 0.0 1.0
+fix              2 all langevin/spin 0.05 0.1 21
+
+# Phase 1: Equilibration without SOT (1000 steps ≈ 0.1 ps)
+fix              3 all nve/spin lattice moving
+dump             1 all custom 100 traj_equilibration.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]
+run              1000
+undump           1
+
+# Phase 2: Apply SOT (damping-like + field-like)
+unfix            3
+fix              3 all nve/spin lattice moving
+fix              4 all precession/spin sot/dl 0.050 0.0 1.0 0.0 sot/fl 0.010 0.0 1.0 0.0
+
+dump             2 all custom 50 dump.skyrmion.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]
+run              2000
+
+thermo           100
+thermo_style     custom step time v_Etot v_KE v_PE
+
+write_dump       all custom dump.skyrmion_final.lammpstrj id x y z c_outsp[1] c_outsp[2] c_outsp[3]

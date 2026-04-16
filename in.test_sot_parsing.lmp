@@ -1,0 +1,40 @@
+# Minimal test for new SOT parsing
+# This input tests if sot/dl and sot/fl parse without errors 
+
+units metal
+atom_style spin
+boundary p p p
+
+lattice bcc 2.8665
+region box block 0.0 2.0 0.0 2.0 0.0 2.0
+create_box 1 box
+create_atoms 1 box
+
+mass 1 55.845
+set group all spin/random 31 2.2
+velocity all create 100 4928459 rot yes dist gaussian
+
+pair_style eam/alloy
+pair_coeff * * /Users/diegoemilioparma/Documents/simulaciones/lammps/examples/SPIN/test_problems/validation_nve/Fe_Mishin2006.eam.alloy Fe
+
+neighbor 0.1 bin
+neigh_modify every 10 check yes delay 20
+
+# Test NEW precession/spin styles: sot/dl and sot/fl
+fix 1 all precession/spin sot/dl 0.02 1.0 0.0 0.0 sot/fl 0.005 1.0 0.0 0.0
+fix 2 all langevin/spin 0.0 0.001 21
+fix 3 all nve/spin lattice moving
+
+timestep 0.0001
+
+compute out_mag all spin
+compute out_pe all pe
+compute out_ke all ke
+variable emag equal c_out_mag[5]
+variable tmag equal c_out_mag[6]
+
+thermo_style custom step time v_tmag temp v_emag ke pe etotal
+thermo 10
+
+# Run short test
+run 50
