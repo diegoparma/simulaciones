@@ -10,11 +10,30 @@ __pycache__/
 # Editor/OS noise
 .DS_Store
 .vscode/
+.idea/
 
 # Build artifacts
 *.o
 *.so
 *.dylib
+*.a
+*.dSYM/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local simulation outputs (keep tracked reference files untouched)
+*.tmp
+*.bak
+dump.*.tmp
+log.*.tmp
+spin_frame_*.tmp.html
 
 # LAMMPS local build outputs
 lammps/build-local-sot/
+lammps/build*/
